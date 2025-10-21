@@ -1,3 +1,6 @@
+/* =============================
+   🌈 Farbvariablen (Light Mode)
+============================= */
 :root {
   --bg: #f0f2f5;
   --sidebar-bg: #fff;
@@ -7,14 +10,31 @@
   --text: #333;
 }
 
+/* =============================
+   🌙 Dark Mode Variablen
+============================= */
+body.dark {
+  --bg: #121212;
+  --sidebar-bg: #1e1e1e;
+  --accent: #bb86fc;
+  --text: #eee;
+}
+
+/* =============================
+   📐 Grundlayout
+============================= */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   display: flex;
   background: var(--bg);
-  transition: background 0.3s;
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
 }
 
+/* =============================
+   🧭 Sidebar
+============================= */
 .sidebar {
   width: var(--sidebar-width);
   background: var(--sidebar-bg);
@@ -22,14 +42,18 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  transition: width 0.3s;
+  transition: width 0.3s, background 0.3s;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
 .sidebar.expanded {
   width: var(--sidebar-expanded);
 }
 
+/* =============================
+   👤 Profilbild
+============================= */
 .profile img {
   width: 40px;
   height: 40px;
@@ -37,6 +61,9 @@ body {
   margin-bottom: 30px;
 }
 
+/* =============================
+   📋 Menü
+============================= */
 .menu {
   list-style: none;
   padding: 0;
@@ -51,6 +78,9 @@ body {
   position: relative;
 }
 
+/* =============================
+   🔘 Buttons
+============================= */
 .menu li button {
   background: var(--accent);
   border: none;
@@ -61,29 +91,60 @@ body {
   border-radius: 15px;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu li button:hover {
   transform: scale(1.1);
+  background: color-mix(in srgb, var(--accent) 90%, white 10%);
 }
 
-/* Tooltip */
+.menu li button:active {
+  transform: scale(0.95);
+}
+
+/* =============================
+   🚫 Tooltips deaktiviert
+============================= */
 .menu li[title]:hover::after {
-  content: attr(title);
-  position: absolute;
-  left: 60px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #333;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-  white-space: nowrap;
-  font-size: 14px;
+  content: none !important;
 }
 
-/* Content */
+/* =============================
+   🪟 Sidebar erweitert (Labels)
+============================= */
+.menu li button .label {
+  display: none;
+  margin-left: 10px;
+  font-size: 16px;
+  transition: opacity 0.2s;
+}
+
+.sidebar.expanded .menu li button {
+  width: 160px;
+  justify-content: flex-start;
+  padding-left: 15px;
+}
+
+.sidebar.expanded .menu li button .label {
+  display: inline;
+  opacity: 1;
+}
+
+/* =============================
+   📄 Hauptinhalt
+============================= */
 .content {
   flex: 1;
   padding: 30px;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* =============================
+   🌞/🌙 Zusatz: Hover-Farben
+============================= */
+body.dark .menu li button:hover {
+  background: color-mix(in srgb, var(--accent) 85%, black 10%);
 }
