@@ -12,15 +12,10 @@
       <img src="https://via.placeholder.com/40" alt="Profilbild">
     </div>
     <ul class="menu">
-      <li title="Home"><button>🏠</button></li>
-      <li title="Infos"><button>📄</button></li>
-      <li title="Benachrichtigungen"><button>🔔</button></li>
-      <li title="Statistiken"><button>📊</button></li>
-      <li title="Favoriten"><button>❤️</button></li>
-      <li title="Wallet"><button>💳</button></li>
-      <li title="Logout"><button>🔓</button></li>
-      <li title="Darkmode"><button onclick="toggleDarkMode()">🌙</button></li>
-      <li title="Sidebar"><button onclick="toggleSidebar()">⏩</button></li>
+      <li title="Home"><button>🏠 <span class="label">Home</span></button></li>
+      <li title="Infos"><button>📄 <span class="label">Infos</span></button></li>
+      <li title="Darkmode"><button id="darkModeBtn" onclick="toggleDarkMode()">🌙 <span class="label" id="modeLabel">Dark Mode</span></button></li>
+      <li title="Sidebar"><button onclick="toggleSidebar()">⏩ <span class="label">Sidebar</span></button></li>
     </ul>
   </aside>
 
