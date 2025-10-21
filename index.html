@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icon Sidebar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="profile">
+      <img src="https://via.placeholder.com/40" alt="Profilbild">
+    </div>
+    <ul class="menu">
+      <li title="Home"><button>🏠</button></li>
+      <li title="Infos"><button>📄</button></li>
+      <li title="Benachrichtigungen"><button>🔔</button></li>
+      <li title="Statistiken"><button>📊</button></li>
+      <li title="Favoriten"><button>❤️</button></li>
+      <li title="Wallet"><button>💳</button></li>
+      <li title="Logout"><button>🔓</button></li>
+      <li title="Darkmode"><button onclick="toggleDarkMode()">🌙</button></li>
+      <li title="Sidebar"><button onclick="toggleSidebar()">⏩</button></li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <h1>Willkommen!</h1>
+    <p>Hier kommt dein Inhalt.</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
