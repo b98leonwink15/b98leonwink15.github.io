@@ -43,6 +43,7 @@ body {
   align-items: center;
   padding: 20px 0;
   transition: width 0.3s, background 0.3s;
+  border-bottom-right-radius: 9px;
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
   overflow: hidden;
 }
@@ -148,3 +149,4 @@ body {
 body.dark .menu li button:hover {
   background: color-mix(in srgb, var(--accent) 85%, black 10%);
 }
+
