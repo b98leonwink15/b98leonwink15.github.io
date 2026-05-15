@@ -1,150 +1,369 @@
-/* =============================
-   🌈 Farbvariablen (Light Mode)
-============================= */
+/* ================================
+   🎨 Design Tokens
+================================ */
 :root {
-  --bg: #f0f2f5;
-  --sidebar-bg: #fff;
-  --sidebar-width: 80px;
-  --sidebar-expanded: 220px;
-  --accent: #f44336;
-  --text: #333;
+  --bg:              #f5f4f1;
+  --surface:         #ffffff;
+  --surface-alt:     #f0ede8;
+  --sidebar-bg:      #0f0f0f;
+  --sidebar-w:       72px;
+  --sidebar-exp:     240px;
+  --accent:          #c8ff00;
+  --accent-fg:       #0f0f0f;
+  --text:            #1a1a1a;
+  --text-muted:      #888;
+  --border:          rgba(0,0,0,0.08);
+  --nav-fg:          rgba(255,255,255,0.45);
+  --nav-hover:       rgba(255,255,255,0.08);
+  --nav-active:      var(--accent);
+  --nav-active-fg:   var(--accent-fg);
+  --radius-sm:       10px;
+  --radius-md:       16px;
+  --radius-lg:       22px;
+  --shadow:          0 2px 16px rgba(0,0,0,0.07);
+  --transition:      0.3s cubic-bezier(.4,0,.2,1);
+  --font:            'DM Sans', system-ui, sans-serif;
+  --font-head:       'Space Grotesk', system-ui, sans-serif;
 }
 
-/* =============================
-   🌙 Dark Mode Variablen
-============================= */
 body.dark {
-  --bg: #121212;
-  --sidebar-bg: #1e1e1e;
-  --accent: #bb86fc;
-  --text: #eee;
+  --bg:              #111111;
+  --surface:         #1c1c1c;
+  --surface-alt:     #242424;
+  --sidebar-bg:      #080808;
+  --text:            #f0eeea;
+  --text-muted:      #666;
+  --border:          rgba(255,255,255,0.07);
+  --shadow:          0 2px 24px rgba(0,0,0,0.4);
 }
 
-/* =============================
-   📐 Grundlayout
-============================= */
+/* ================================
+   📐 Reset & Base
+================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
   display: flex;
+  min-height: 100vh;
   background: var(--bg);
   color: var(--text);
-  transition: background 0.3s, color 0.3s;
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* =============================
+/* ================================
    🧭 Sidebar
-============================= */
+================================ */
 .sidebar {
-  width: var(--sidebar-width);
+  width: var(--sidebar-w);
+  min-height: 100vh;
   background: var(--sidebar-bg);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px 0;
-  transition: width 0.3s, background 0.3s;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 20px 12px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
   overflow: hidden;
+  transition: width var(--transition);
 }
 
 .sidebar.expanded {
-  width: var(--sidebar-expanded);
+  width: var(--sidebar-exp);
 }
 
-/* =============================
-   👤 Profilbild
-============================= */
-.profile img {
+/* ================================
+   🔵 Logo
+================================ */
+.sidebar-top {
+  margin-bottom: 32px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+}
+
+.logo-mark {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  margin-bottom: 30px;
-}
-
-/* =============================
-   📋 Menü
-============================= */
-.menu {
-  list-style: none;
-  padding: 0;
-  width: 100%;
-}
-
-.menu li {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  position: relative;
-}
-
-/* =============================
-   🔘 Buttons
-============================= */
-.menu li button {
+  min-width: 40px;
   background: var(--accent);
-  border: none;
-  color: white;
-  font-size: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: var(--accent-fg);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+.logo-text {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 17px;
+  color: #fff;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.sidebar.expanded .logo-text {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ================================
+   📋 Nav
+================================ */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--nav-fg);
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.nav-item:hover {
+  background: var(--nav-hover);
+  color: rgba(255,255,255,0.85);
+}
+
+.nav-item.active {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.menu li button:hover {
-  transform: scale(1.1);
-  background: color-mix(in srgb, var(--accent) 90%, white 10%);
+.nav-label {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity var(--transition), transform var(--transition);
+  overflow: hidden;
 }
 
-.menu li button:active {
-  transform: scale(0.95);
-}
-
-/* =============================
-   🚫 Tooltips deaktiviert
-============================= */
-.menu li[title]:hover::after {
-  content: none !important;
-}
-
-/* =============================
-   🪟 Sidebar erweitert (Labels)
-============================= */
-.menu li button .label {
-  display: none;
-  margin-left: 10px;
-  font-size: 16px;
-  transition: opacity 0.2s;
-}
-
-.sidebar.expanded .menu li button {
-  width: 160px;
-  justify-content: flex-start;
-  padding-left: 15px;
-}
-
-.sidebar.expanded .menu li button .label {
-  display: inline;
+.sidebar.expanded .nav-label {
   opacity: 1;
+  transform: translateX(0);
 }
 
-/* =============================
-   📄 Hauptinhalt
-============================= */
+/* ================================
+   ⬇ Sidebar Bottom
+================================ */
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 16px;
+}
+
+.theme-btn,
+.collapse-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--nav-fg);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+  text-align: left;
+}
+
+.theme-btn:hover,
+.collapse-btn:hover {
+  background: var(--nav-hover);
+  color: rgba(255,255,255,0.85);
+}
+
+/* ================================
+   📄 Main Content
+================================ */
 .content {
+  margin-left: var(--sidebar-w);
   flex: 1;
-  padding: 30px;
-  transition: background 0.3s, color 0.3s;
+  padding: 32px 36px;
+  transition: margin-left var(--transition);
 }
 
-/* =============================
-   🌞/🌙 Zusatz: Hover-Farben
-============================= */
-body.dark .menu li button:hover {
-  background: color-mix(in srgb, var(--accent) 85%, black 10%);
+.sidebar.expanded ~ .content {
+  margin-left: var(--sidebar-exp);
+}
+
+/* ================================
+   🔝 Topbar
+================================ */
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 36px;
+}
+
+.page-title {
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.page-sub {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* ================================
+   🃏 Cards
+================================ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px;
+  transition: background var(--transition), border-color var(--transition), transform 0.15s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,0,0,0.13);
+}
+
+body.dark .card:hover {
+  border-color: rgba(255,255,255,0.12);
+}
+
+.card--accent {
+  background: var(--accent);
+  border-color: transparent;
+}
+
+.card--accent .card-label,
+.card--accent .card-value,
+.card--accent .card-hint {
+  color: var(--accent-fg) !important;
+}
+
+.card-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.card-value {
+  font-family: var(--font-head);
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.card-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ================================
+   📦 Welcome Block
+================================ */
+.welcome-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.welcome-block h2 {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 10px;
+}
+
+.welcome-block p {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.tag {
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  transition: background var(--transition);
 }
