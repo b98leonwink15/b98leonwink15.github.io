@@ -17,7 +17,8 @@
 | 🎨 **5 Akzentfarben** | Limette, Violett, Blau, Orange, Pink — umschaltbar unter Einstellungen |
 | ♿ **Barrierefrei gedacht** | Sprunglink, sichtbarer Tastaturfokus, ARIA-Rollen, `prefers-reduced-motion`, geprüfte Kontraste |
 | 🎬 **Animationen** | Einblenden beim Scrollen, hochzählende Zahlen, animierte Skill-Balken |
-| 🏷️ **Projekt-Filter** | Karten nach Kategorie filtern |
+| 🐙 **Projekte direkt von GitHub** | Die Projektseite lädt alle öffentlichen Repos über die GitHub-API — neue Projekte erscheinen von selbst |
+| 🏷️ **Automatische Filter** | Die Filterleiste entsteht aus den tatsächlich gefundenen Programmiersprachen |
 | 🖨️ **Druck-Stylesheet** | Alle Seiten werden gedruckt, Navigation fällt weg |
 
 ---
@@ -34,9 +35,47 @@
 
 ---
 
-## ✏️ Inhalte anpassen
+## 🐙 Projekte kommen von GitHub
 
-Alle Stellen, an denen eigene Inhalte hin müssen, sind in `index.html` markiert:
+Die Projektseite pflegt sich selbst. Beim Laden holt sie alle öffentlichen Repos
+von `api.github.com` und baut daraus die Karten — mit Sprache, Sternen, Themen
+und Datum der letzten Änderung. **Ein neues Repo auf GitHub taucht automatisch auf.**
+
+Damit das gut aussieht, lohnt es sich, auf GitHub bei jedem Repo unter
+*About → Description* einen Satz einzutragen. Alternativ geht es lokal: ganz oben
+in `script.js` steht ein Abschnitt `REPO_INFO`, der die GitHub-Beschreibung überschreibt.
+
+```js
+var REPO_INFO = {
+  "carryMobs": {
+    titel: "Carry Mobs",                    // optional: anderer Anzeigename
+    beschreibung: "Minecraft-Plugin, ...",  // Text auf der Karte
+    demo: "https://...",                    // optional: Link zur Live-Version
+    hervorheben: true                       // optional: steht dann ganz vorne
+  }
+};
+```
+
+Weitere Schalter direkt darüber:
+
+| Einstellung | Bedeutung |
+|---|---|
+| `GITHUB_USER` | Von welchem Konto geladen wird |
+| `REPO_AUSBLENDEN` | Liste von Repo-Namen, die nicht erscheinen sollen |
+| `FORKS_ZEIGEN` | Ob geforkte Repos mitgezählt werden (Standard: nein) |
+| `CACHE_MINUTEN` | Wie lange die Antwort zwischengespeichert wird (Standard: 30) |
+
+**Wenn GitHub mal nicht antwortet**, bleiben die fest eingebauten Karten aus
+`index.html` stehen und ein Hinweis erscheint. Die Seite ist also nie leer.
+
+> GitHub erlaubt 60 Anfragen pro Stunde und Besucher-IP. Durch den Zwischenspeicher
+> kommt eine normale Portfolio-Seite da nie in die Nähe.
+
+---
+
+## ✏️ Restliche Inhalte anpassen
+
+Alle Stellen, an denen noch eigene Inhalte hin müssen, sind in `index.html` markiert:
 
 ```html
 <!-- PLATZHALTER: ... -->
@@ -45,10 +84,9 @@ Alle Stellen, an denen eigene Inhalte hin müssen, sind in `index.html` markiert
 Einfach im Editor nach `PLATZHALTER` suchen (`Strg + F`) — dann findest du der Reihe nach:
 
 1. **Über-mich-Text** — die zwei Absätze auf der Seite „Über mich"
-2. **Projekte** — drei Beispielkarten. Nicht gebrauchte Karten einfach löschen, das Raster passt sich an.
-3. **Skills** — die Prozentwerte stehen in `data-level="65"` *und* im Text daneben. Beide ändern.
-4. **Kontakt** — bei Instagram, Discord und LinkedIn das `href="#"` ersetzen (und `aria-disabled` sowie `contact-card--todo` entfernen), sonst die Karte löschen.
-5. **Zahlen auf der Startseite** — stehen in `data-count="4"`.
+2. **Skills** — die Prozentwerte stehen in `data-level="65"` *und* im Text daneben. Beide ändern.
+3. **Kontakt** — bei Instagram, Discord und LinkedIn das `href="#"` ersetzen (und `aria-disabled` sowie `contact-card--todo` entfernen), sonst die Karte löschen.
+4. **Zahlen auf der Startseite** — stehen in `data-count="4"`. Die Projekt-Zahl wird automatisch von GitHub überschrieben.
 
 ---
 
@@ -99,7 +137,8 @@ Dann `index.html` im Browser öffnen. Fertig — es muss nichts gebaut oder inst
 - [x] Echte Unterseiten
 - [x] Seitenübergänge animieren
 - [x] Akzentfarbe wählbar
-- [ ] Eigene Projekte eintragen
+- [x] Projekte automatisch von GitHub laden
+- [ ] Beschreibungen für `carryMobs` und `Ticket.py` eintragen
 - [ ] Eigenes Foto statt Buchstaben-Avatar
 - [ ] Kontaktformular (braucht einen Dienst wie Formspree, GitHub Pages kann kein PHP)
 - [ ] Blog- oder Notizen-Bereich

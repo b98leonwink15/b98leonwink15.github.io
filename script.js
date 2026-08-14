@@ -3,6 +3,7 @@
    Vanilla JS, keine Abhängigkeiten.
 
    Inhalt:
+     0. ⚙️  EINSTELLUNGEN — hier trägst du deine Sachen ein
      1. Hilfsfunktionen & Speicher
      2. Theme (Dark Mode)
      3. Akzentfarbe
@@ -12,12 +13,61 @@
      7. Router (Unterseiten über #/pfad)
      8. Scroll-Animationen & Zähler
      9. Skill-Balken
-    10. Projekt-Filter
-    11. Tastaturkürzel
+    10. Projekte von GitHub laden
+    11. Projekt-Filter
+    12. Tastaturkürzel
    ========================================================================== */
 
 (function () {
   "use strict";
+
+  /* ======================================================================
+     0. EINSTELLUNGEN
+        Das ist der einzige Abschnitt, den du normalerweise anfassen musst.
+     ====================================================================== */
+
+  /* Dein GitHub-Benutzername. Die Projektseite lädt daraus automatisch
+     alle öffentlichen Repos — neue Projekte erscheinen von selbst. */
+  var GITHUB_USER = "b98leonwink15";
+
+  /* Eigene Beschreibungen. Was hier steht, gewinnt gegen die Beschreibung
+     auf GitHub. Praktisch für Repos, bei denen dort nichts eingetragen ist.
+     Schlüssel = Repo-Name, Groß-/Kleinschreibung egal.
+
+     Felder (alle optional):
+       titel        → anderer Anzeigename als der Repo-Name
+       beschreibung → Text auf der Karte
+       demo         → Link zu einer Live-Version
+       hervorheben  → true, dann steht das Projekt ganz vorne             */
+  var REPO_INFO = {
+    "b98leonwink15.github.io": {
+      titel: "Portfolio-Dashboard",
+      beschreibung: "Diese Seite. Einklappbare Sidebar, Dark Mode mit Speicherung " +
+                    "und Unterseiten ohne Reload — in reinem HTML, CSS und JavaScript.",
+      demo: "https://b98leonwink15.github.io",
+      hervorheben: true
+    },
+    "carryMobs": {
+      // TODO: eigene Beschreibung eintragen
+      beschreibung: "Java-Projekt."
+    },
+    "Ticket.py": {
+      // TODO: eigene Beschreibung eintragen
+      beschreibung: "Python-Projekt."
+    }
+  };
+
+  /* Repos, die auf der Seite nicht auftauchen sollen — Namen eintragen, z.B.
+     var REPO_AUSBLENDEN = ["test-repo", "alte-hausaufgaben"];            */
+  var REPO_AUSBLENDEN = [];
+
+  /* Sollen geforkte Repos angezeigt werden? */
+  var FORKS_ZEIGEN = false;
+
+  /* Wie lange die GitHub-Antwort zwischengespeichert wird (Minuten).
+     GitHub erlaubt 60 Anfragen pro Stunde und Besucher — mit Cache
+     kommt man da nie in die Nähe. */
+  var CACHE_MINUTEN = 30;
 
   var root = document.documentElement;
   var body = document.body;
@@ -384,11 +434,243 @@
 
 
   /* ======================================================================
-     10. PROJEKT-FILTER
+     10. PROJEKTE VON GITHUB LADEN
+     ====================================================================== */
+  var grid       = $("#projectGrid");
+  var repoStatus = $("#repoStatus");
+
+  /* Farben wie auf GitHub — für den kleinen Punkt neben der Sprache */
+  var LANG_COLOR = {
+    javascript: "#f1e05a", typescript: "#3178c6", html: "#e34c26", css: "#563d7c",
+    python: "#3572A5", java: "#b07219", "c#": "#178600", "c++": "#f34b7d", c: "#555555",
+    php: "#4F5D95", ruby: "#701516", go: "#00ADD8", rust: "#dea584", swift: "#F05138",
+    kotlin: "#A97BFF", dart: "#00B4AB", shell: "#89e051", lua: "#000080", vue: "#41b883"
+  };
+
+  /* Passendes Symbol je Sprache */
+  var LANG_ICON = {
+    java:   '<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+    python: '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+    shell:  '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+    html:   '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>',
+    css:    '<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/>',
+    _code:  '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    _repo:  '<path d="M12 2l3 6 6 .9-4.5 4.3 1.1 6.3L12 16.5 6.4 19.5l1.1-6.3L3 8.9 9 8z"/>'
+  };
+
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  /* Repo-Namen unabhängig von Groß-/Kleinschreibung nachschlagen */
+  function repoInfo(name) {
+    var key = Object.keys(REPO_INFO).find(function (k) {
+      return k.toLowerCase() === String(name).toLowerCase();
+    });
+    return key ? REPO_INFO[key] : {};
+  }
+
+  /* "vor 3 Tagen" statt "2026-08-11T09:22:41Z" */
+  function relativeDate(iso) {
+    var then = new Date(iso).getTime();
+    if (!then) return "";
+    var diffDays = Math.round((then - Date.now()) / 86400000);
+
+    if (typeof Intl === "undefined" || !Intl.RelativeTimeFormat) {
+      return new Date(iso).toLocaleDateString("de-DE");
+    }
+    var rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
+
+    if (Math.abs(diffDays) < 30)  return rtf.format(diffDays, "day");
+    if (Math.abs(diffDays) < 365) return rtf.format(Math.round(diffDays / 30), "month");
+    return rtf.format(Math.round(diffDays / 365), "year");
+  }
+
+  function repoCard(repo) {
+    var info  = repoInfo(repo.name);
+    var lang  = repo.language || "";
+    var lkey  = lang.toLowerCase();
+    var cat   = lkey.replace(/[^a-z0-9]/g, "") || "sonstiges";
+    var icon  = LANG_ICON[lkey] || (lang ? LANG_ICON._code : LANG_ICON._repo);
+    var demo  = info.demo || repo.homepage || "";
+    var title = info.titel || repo.name;
+    var desc  = info.beschreibung || repo.description ||
+                "Noch keine Beschreibung — trag sie auf GitHub ein oder in script.js unter REPO_INFO.";
+
+    var topics = (repo.topics || []).slice(0, 4);
+
+    var html = '<article class="project" data-cat="' + esc(cat) + '">';
+
+    html += '<div class="project-top"><span class="project-icon" aria-hidden="true">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
+            'stroke-linecap="round" stroke-linejoin="round">' + icon + '</svg></span>';
+
+    if (demo)           html += '<span class="badge badge--live">Live</span>';
+    else if (repo.fork) html += '<span class="badge">Fork</span>';
+    else if (repo.archived) html += '<span class="badge">Archiv</span>';
+    else if (lang)      html += '<span class="badge">' + esc(lang) + '</span>';
+    html += '</div>';
+
+    html += '<h4>' + esc(title) + '</h4>';
+    html += '<p>' + esc(desc) + '</p>';
+
+    if (topics.length) {
+      html += '<div class="tags">' + topics.map(function (t) {
+        return '<span class="tag">' + esc(t) + '</span>';
+      }).join("") + '</div>';
+    }
+
+    html += '<div class="project-meta">';
+    if (lang) {
+      html += '<span class="lang"><i style="--c:' + esc(LANG_COLOR[lkey] || "#8b8b93") + '"></i>' +
+              esc(lang) + '</span>';
+    }
+    if (repo.stargazers_count > 0) {
+      html += '<span class="meta-item" title="Sterne">★ ' + repo.stargazers_count + '</span>';
+    }
+    if (repo.pushed_at) {
+      html += '<span class="meta-item">' + esc(relativeDate(repo.pushed_at)) + '</span>';
+    }
+    html += '</div>';
+
+    html += '<div class="project-links">';
+    html += '<a href="' + esc(repo.html_url) + '" target="_blank" rel="noopener">Code →</a>';
+    if (demo) html += '<a href="' + esc(demo) + '" target="_blank" rel="noopener">Live →</a>';
+    html += '</div>';
+
+    return html + '</article>';
+  }
+
+  function renderRepos(repos) {
+    if (!grid) return;
+
+    var hide = REPO_AUSBLENDEN.map(function (n) { return n.toLowerCase(); });
+
+    var list = repos
+      .filter(function (r) {
+        if (!r || r.private) return false;
+        if (!FORKS_ZEIGEN && r.fork) return false;
+        return hide.indexOf(String(r.name).toLowerCase()) === -1;
+      })
+      .sort(function (a, b) {
+        /* hervorgehobene zuerst, danach zuletzt bearbeitete */
+        var pa = repoInfo(a.name).hervorheben ? 1 : 0;
+        var pb = repoInfo(b.name).hervorheben ? 1 : 0;
+        if (pa !== pb) return pb - pa;
+        return new Date(b.pushed_at || 0) - new Date(a.pushed_at || 0);
+      });
+
+    if (!list.length) return;   /* nichts gefunden → Fallback stehen lassen */
+
+    grid.innerHTML = list.map(repoCard).join("");
+    buildFilters();
+
+    /* Die Zahl auf der Startseite gleich mit aktualisieren */
+    var counter = $(".card--accent .card-value[data-count]");
+    if (counter) {
+      counter.dataset.count = String(list.length);
+      if (counter.dataset.counted === "1") counter.textContent = String(list.length);
+    }
+
+    if (repoStatus) {
+      repoStatus.hidden = false;
+      repoStatus.className = "repo-status";
+      repoStatus.innerHTML = list.length + " öffentliche Repos · direkt von " +
+        '<a href="https://github.com/' + esc(GITHUB_USER) + '" target="_blank" rel="noopener">GitHub</a>';
+    }
+  }
+
+  function loadRepos() {
+    if (!grid) return;
+
+    /* 1) Zwischenspeicher prüfen — spart Anfragen und lädt sofort */
+    try {
+      var cached = JSON.parse(store.get("ghRepos") || "null");
+      if (cached && Date.now() - cached.t < CACHE_MINUTEN * 60000) {
+        renderRepos(cached.data);
+        return;
+      }
+    } catch (e) {}
+
+    if (!window.fetch) { buildFilters(); return; }
+
+    if (repoStatus) {
+      repoStatus.hidden = false;
+      repoStatus.className = "repo-status is-loading";
+      repoStatus.textContent = "Lade Projekte von GitHub …";
+    }
+
+    fetch("https://api.github.com/users/" + GITHUB_USER + "/repos?sort=pushed&per_page=100", {
+      headers: { Accept: "application/vnd.github+json" }
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (!Array.isArray(data)) throw new Error("unerwartete Antwort");
+        store.set("ghRepos", JSON.stringify({ t: Date.now(), data: data }));
+        renderRepos(data);
+      })
+      .catch(function (err) {
+        /* Fallback-Karten aus dem HTML bleiben einfach stehen */
+        buildFilters();
+        if (!repoStatus) return;
+
+        repoStatus.hidden = false;
+        repoStatus.className = "repo-status is-error";
+
+        if (location.protocol === "file:") {
+          /* Häufigster Fall beim lokalen Testen: die Datei wurde per Doppelklick
+             geöffnet. Browser verbieten Netzanfragen von file:// aus. Auf der
+             echten Seite (https://…) funktioniert es ganz normal. */
+          repoStatus.textContent =
+            "Die Live-Projekte von GitHub erscheinen nur, wenn die Seite über einen " +
+            "Server läuft — beim Doppelklick auf index.html blockiert der Browser die " +
+            "Anfrage. Auf b98leonwink15.github.io funktioniert es. Unten steht solange " +
+            "die fest eingetragene Liste.";
+        } else {
+          repoStatus.textContent =
+            "GitHub war gerade nicht erreichbar (" + err.message + ") — " +
+            "unten steht die fest eingetragene Liste.";
+        }
+      });
+  }
+
+
+  /* ======================================================================
+     11. PROJEKT-FILTER
+          Die Kategorien entstehen aus den tatsächlich vorhandenen Karten,
+          es muss also nichts von Hand gepflegt werden.
      ====================================================================== */
   var filters    = $("#projectFilters");
-  var projects   = $$(".project");
   var emptyState = $("#emptyState");
+
+  function buildFilters() {
+    if (!filters || !grid) return;
+
+    var cats = [];
+    $$(".project", grid).forEach(function (p) {
+      (p.dataset.cat || "").split(/\s+/).forEach(function (c) {
+        if (c && cats.indexOf(c) === -1) cats.push(c);
+      });
+    });
+
+    /* Bei nur einer Kategorie brauchen wir keine Filterleiste */
+    if (cats.length < 2) { filters.innerHTML = ""; return; }
+
+    cats.sort();
+
+    filters.innerHTML =
+      '<button class="chip is-active" data-filter="all">Alle</button>' +
+      cats.map(function (c) {
+        var label = $('.project[data-cat~="' + c + '"] .lang', grid);
+        var text  = label ? label.textContent.trim() : c;
+        return '<button class="chip" data-filter="' + esc(c) + '">' + esc(text) + "</button>";
+      }).join("");
+  }
 
   if (filters) {
     filters.addEventListener("click", function (e) {
@@ -399,7 +681,7 @@
       $$(".chip", filters).forEach(function (c) { c.classList.toggle("is-active", c === chip); });
 
       var visible = 0;
-      projects.forEach(function (p) {
+      $$(".project", grid).forEach(function (p) {
         var cats = (p.dataset.cat || "").split(/\s+/);
         var show = filter === "all" || cats.indexOf(filter) !== -1;
         p.hidden = !show;
@@ -412,7 +694,7 @@
 
 
   /* ======================================================================
-     11. TASTATURKÜRZEL
+     12. TASTATURKÜRZEL
      ====================================================================== */
   document.addEventListener("keydown", function (e) {
     /* nicht auslösen, während getippt wird */
@@ -462,4 +744,5 @@
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
   showPage(currentRoute(), true);
+  loadRepos();
 })();

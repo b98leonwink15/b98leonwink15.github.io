@@ -175,10 +175,10 @@
       </div>
 
       <div class="cards reveal">
-        <!-- PLATZHALTER: Zahlen anpassen -->
+        <!-- Diese Zahl wird automatisch durch die echte Repo-Anzahl von GitHub ersetzt -->
         <article class="card card--accent">
           <div class="card-label">Projekte</div>
-          <div class="card-value" data-count="4">0</div>
+          <div class="card-value" data-count="3">0</div>
           <div class="card-hint">öffentlich auf GitHub</div>
         </article>
         <article class="card">
@@ -285,31 +285,34 @@
     </section>
 
     <!-- ================= PROJEKTE ================= -->
+    <!--
+      Die Karten hier drin sind nur der Notfall-Inhalt: Sie erscheinen, solange
+      GitHub noch lädt, und bleiben stehen, falls die API nicht erreichbar ist.
+      Im Normalfall ersetzt script.js sie durch die Live-Daten deiner Repos.
+      Eigene Beschreibungen trägst du oben in script.js unter REPO_INFO ein —
+      nicht hier.
+    -->
     <section class="page" id="page-projects" data-page="projects" hidden>
       <div class="section-head reveal">
         <h3>Meine Projekte</h3>
-        <div class="filters" id="projectFilters" role="group" aria-label="Projekte filtern">
-          <button class="chip is-active" data-filter="all">Alle</button>
-          <button class="chip" data-filter="web">Web</button>
-          <button class="chip" data-filter="js">JavaScript</button>
-          <button class="chip" data-filter="design">Design</button>
-        </div>
+        <div class="filters" id="projectFilters" role="group" aria-label="Projekte filtern"></div>
       </div>
+
+      <p class="repo-status" id="repoStatus" role="status" hidden></p>
 
       <div class="projects" id="projectGrid">
 
-        <!-- Echtes Projekt -->
-        <article class="project reveal" data-cat="web js design">
+        <article class="project" data-cat="css">
           <div class="project-top">
             <span class="project-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
             </span>
             <span class="badge badge--live">Live</span>
           </div>
-          <h4>Portfolio-Dashboard</h4>
-          <p>Diese Seite. Einklappbare Sidebar, Dark Mode mit Speicherung, Unterseiten ohne Reload — alles in reinem HTML, CSS und JavaScript.</p>
-          <div class="tags">
-            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+          <h4>b98leonwink15.github.io</h4>
+          <p>Diese Seite. Einklappbare Sidebar, Dark Mode mit Speicherung und Unterseiten ohne Reload — in reinem HTML, CSS und JavaScript.</p>
+          <div class="project-meta">
+            <span class="lang"><i style="--c:#563d7c"></i>CSS</span>
           </div>
           <div class="project-links">
             <a href="https://github.com/b98leonwink15/b98leonwink15.github.io" target="_blank" rel="noopener">Code →</a>
@@ -317,57 +320,37 @@
           </div>
         </article>
 
-        <!-- PLATZHALTER-PROJEKT 1 — Titel, Text, Tags und Links ersetzen -->
-        <article class="project reveal" data-cat="js">
+        <article class="project" data-cat="java">
           <div class="project-top">
             <span class="project-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
             </span>
-            <span class="badge">In Arbeit</span>
+            <span class="badge">Java</span>
           </div>
-          <h4>Projekt zwei</h4>
-          <p>Kurz beschreiben, was das Projekt macht und was du dabei gelernt hast. Zwei bis drei Sätze reichen völlig.</p>
-          <div class="tags">
-            <span class="tag">JavaScript</span><span class="tag">API</span>
+          <h4>carryMobs</h4>
+          <p>Java-Projekt.</p>
+          <div class="project-meta">
+            <span class="lang"><i style="--c:#b07219"></i>Java</span>
           </div>
           <div class="project-links">
-            <a href="#" aria-disabled="true">Code →</a>
+            <a href="https://github.com/b98leonwink15/carryMobs" target="_blank" rel="noopener">Code →</a>
           </div>
         </article>
 
-        <!-- PLATZHALTER-PROJEKT 2 -->
-        <article class="project reveal" data-cat="web design">
+        <article class="project" data-cat="python">
           <div class="project-top">
             <span class="project-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.7-.7 1.7-1.7 0-.4-.2-.8-.5-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.7 1.7-1.7H16c3.3 0 6-2.7 6-6 0-4.9-4.5-8.4-10-8.4z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
             </span>
-            <span class="badge">Idee</span>
+            <span class="badge">Python</span>
           </div>
-          <h4>Projekt drei</h4>
-          <p>Noch ein Platz für ein Projekt. Wenn du keins hast: lösch die Karte einfach raus, das Layout passt sich automatisch an.</p>
-          <div class="tags">
-            <span class="tag">CSS</span><span class="tag">Design</span>
+          <h4>Ticket.py</h4>
+          <p>Python-Projekt.</p>
+          <div class="project-meta">
+            <span class="lang"><i style="--c:#3572A5"></i>Python</span>
           </div>
           <div class="project-links">
-            <a href="#" aria-disabled="true">Code →</a>
-          </div>
-        </article>
-
-        <!-- PLATZHALTER-PROJEKT 3 -->
-        <article class="project reveal" data-cat="web">
-          <div class="project-top">
-            <span class="project-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 .9-4.5 4.3 1.1 6.3L12 16.5 6.4 19.5l1.1-6.3L3 8.9 9 8z"/></svg>
-            </span>
-            <span class="badge">Idee</span>
-          </div>
-          <h4>Projekt vier</h4>
-          <p>Hier könnte dein nächstes Projekt stehen. Ein Rechner, ein Spiel, eine Wetter-App — Hauptsache, du hast Lust drauf.</p>
-          <div class="tags">
-            <span class="tag">HTML</span><span class="tag">JavaScript</span>
-          </div>
-          <div class="project-links">
-            <a href="#" aria-disabled="true">Code →</a>
+            <a href="https://github.com/b98leonwink15/Ticket.py" target="_blank" rel="noopener">Code →</a>
           </div>
         </article>
       </div>
