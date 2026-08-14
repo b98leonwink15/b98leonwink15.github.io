@@ -1,79 +1,112 @@
-# 🖤 Leon — Personal Dashboard
+# 🖤 Leon — Portfolio
 
-> A clean, modern sidebar dashboard built with pure HTML, CSS & JavaScript.  
-> No frameworks. No dependencies. Just good code.
+> Persönliches Portfolio mit Dashboard-Optik.
+> Reines HTML, CSS und JavaScript. Keine Frameworks, keine Build-Tools, keine Abhängigkeiten.
+
+**Live:** https://b98leonwink15.github.io
 
 ---
 
 ## ✨ Features
 
-- **Collapsible Sidebar** — Smooth animated sidebar with icon-only and expanded modes
-- **Dark / Light Mode** — One-click toggle with `localStorage` persistence
-- **Responsive Layout** — Works on all screen sizes
-- **No Dependencies** — Pure HTML, CSS, and Vanilla JS
-- **GitHub Pages Ready** — Deploy instantly, zero setup
+| | |
+|---|---|
+| 🧭 **Unterseiten ohne Reload** | Home, Über mich, Projekte, Skills, Kontakt, Einstellungen — per Hash-Routing (`#/projects`), also auch direkt verlinkbar |
+| 📱 **Voll responsiv** | Auf Mobile wird die Sidebar zur Schublade mit Burger-Menü, Backdrop und Fokusfalle |
+| 🌙 **Dark Mode** | Folgt beim ersten Besuch der Systemeinstellung, danach der eigenen Wahl — ohne weißes Aufblitzen beim Laden |
+| 🎨 **5 Akzentfarben** | Limette, Violett, Blau, Orange, Pink — umschaltbar unter Einstellungen |
+| ♿ **Barrierefrei gedacht** | Sprunglink, sichtbarer Tastaturfokus, ARIA-Rollen, `prefers-reduced-motion`, geprüfte Kontraste |
+| 🎬 **Animationen** | Einblenden beim Scrollen, hochzählende Zahlen, animierte Skill-Balken |
+| 🏷️ **Projekt-Filter** | Karten nach Kategorie filtern |
+| 🖨️ **Druck-Stylesheet** | Alle Seiten werden gedruckt, Navigation fällt weg |
 
 ---
 
-## 📁 File Structure
+## 📁 Dateien
 
 ```
-📦 Project
- ┣ 📄 index.html    → Markup & structure
- ┣ 🎨 style.css     → All styling & CSS variables
- ┗ ⚙️ script.js     → Dark mode & sidebar toggle logic
+📦 Projekt
+ ┣ 📄 index.html   → Struktur, alle Seiten, Anti-Flash-Script im <head>
+ ┣ 🎨 style.css    → Design Tokens, Layout, Responsive, Animationen
+ ┣ ⚙️ script.js    → Router, Theme, Menü, Filter, Animationen
+ ┗ 📖 README.md    → diese Datei
 ```
 
 ---
 
-## 🚀 Getting Started
+## ✏️ Inhalte anpassen
 
-### Option 1 — Open locally
-Just clone and open `index.html` in your browser:
+Alle Stellen, an denen eigene Inhalte hin müssen, sind in `index.html` markiert:
+
+```html
+<!-- PLATZHALTER: ... -->
+```
+
+Einfach im Editor nach `PLATZHALTER` suchen (`Strg + F`) — dann findest du der Reihe nach:
+
+1. **Über-mich-Text** — die zwei Absätze auf der Seite „Über mich"
+2. **Projekte** — drei Beispielkarten. Nicht gebrauchte Karten einfach löschen, das Raster passt sich an.
+3. **Skills** — die Prozentwerte stehen in `data-level="65"` *und* im Text daneben. Beide ändern.
+4. **Kontakt** — bei Instagram, Discord und LinkedIn das `href="#"` ersetzen (und `aria-disabled` sowie `contact-card--todo` entfernen), sonst die Karte löschen.
+5. **Zahlen auf der Startseite** — stehen in `data-count="4"`.
+
+---
+
+## ⌨️ Tastaturkürzel
+
+| Taste | Funktion |
+|---|---|
+| `Shift` + `D` | Dark Mode umschalten |
+| `Shift` + `B` | Sidebar ein-/ausklappen |
+| `Esc` | Mobiles Menü schließen |
+| `Tab` | Navigation — der Sprunglink oben kommt zuerst |
+
+---
+
+## 🎨 Design
+
+| | |
+|---|---|
+| Farbschema | Dunkle Sidebar, heller Content-Bereich |
+| Akzent (Standard) | `#c8ff00` — Electric Lime |
+| Schriften | DM Sans (Text), Space Grotesk (Überschriften) |
+| Radien | 8 – 28 px, je nach Bausteingröße |
+| Übergänge | 160 / 280 / 500 ms, `cubic-bezier(.4, 0, .2, 1)` |
+| Speicherung | Theme, Farbe, Sidebar & Animationen via `localStorage` |
+
+Farben und Maße stecken alle als CSS-Variablen ganz oben in `style.css`. Wer das
+komplette Farbschema ändern will, muss nur dort ran — nicht durch die ganze Datei.
+
+---
+
+## 🚀 Lokal starten
 
 ```bash
 git clone https://github.com/b98leonwink15/b98leonwink15.github.io.git
 cd b98leonwink15.github.io
-open index.html
 ```
 
-### Option 2 — GitHub Pages
-This project is live via GitHub Pages:
+Dann `index.html` im Browser öffnen. Fertig — es muss nichts gebaut oder installiert werden.
 
-```
-https://b98leonwink15.github.io
-```
-
----
-
-## 🎨 Design Highlights
-
-| Feature | Detail |
-|---|---|
-| Color Scheme | Dark sidebar + light content area |
-| Accent Color | `#c8ff00` (Electric Lime) |
-| Fonts | DM Sans + Space Grotesk |
-| Animations | CSS transitions, 300ms cubic-bezier |
-| State | Persisted via `localStorage` |
-
----
-
-## 🌙 Dark Mode
-
-Dark mode is toggled via a button in the sidebar and saved to `localStorage`, so the preference is remembered on next visit.
+> 💡 Tipp: In VS Code die Erweiterung **Live Server** installieren, dann lädt der
+> Browser bei jeder Änderung automatisch neu.
 
 ---
 
 ## 📌 Roadmap
 
-- [ ] Add more pages / sections
-- [ ] Mobile hamburger menu
-- [ ] Animated page transitions
-- [ ] Add real project content
+- [x] Mobiles Menü
+- [x] Echte Unterseiten
+- [x] Seitenübergänge animieren
+- [x] Akzentfarbe wählbar
+- [ ] Eigene Projekte eintragen
+- [ ] Eigenes Foto statt Buchstaben-Avatar
+- [ ] Kontaktformular (braucht einen Dienst wie Formspree, GitHub Pages kann kein PHP)
+- [ ] Blog- oder Notizen-Bereich
 
 ---
 
-## 🧑‍💻 Author
+## 🧑‍💻 Autor
 
 **Leon** — [@b98leonwink15](https://github.com/b98leonwink15)
 

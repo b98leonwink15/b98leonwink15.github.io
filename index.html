@@ -3,107 +3,561 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leon — Dashboard</title>
+  <title>Leon — Portfolio</title>
+
+  <!-- SEO & Social -->
+  <meta name="description" content="Portfolio von Leon — Schüler und angehender Webentwickler. Projekte, Skills und Kontakt.">
+  <meta name="theme-color" content="#0f0f0f">
+  <meta name="author" content="Leon">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Leon — Portfolio">
+  <meta property="og:description" content="Schüler & angehender Webentwickler. Projekte, Skills und Kontakt.">
+  <meta property="og:url" content="https://b98leonwink15.github.io">
+  <meta name="twitter:card" content="summary">
+
+  <!-- Favicon (inline SVG, keine extra Datei nötig) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f0f0f'/%3E%3Ctext x='50' y='69' font-family='Arial,sans-serif' font-size='58' font-weight='bold' fill='%23c8ff00' text-anchor='middle'%3EL%3C/text%3E%3C/svg%3E">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <!--
+    Anti-Flash-Script: setzt Theme, Akzentfarbe und Sidebar-Status VOR dem ersten
+    Rendern. Ohne das blitzt beim Laden kurz die helle Version auf.
+    Muss inline und im <head> stehen — nicht in die script.js verschieben.
+  -->
+  <script>
+    (function () {
+      try {
+        var d = document.documentElement;
+        var saved = localStorage.getItem("darkMode");
+        var dark = saved !== null
+          ? saved === "true"
+          : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (dark) d.classList.add("dark");
+
+        var a = localStorage.getItem("accent");
+        if (a) d.setAttribute("data-accent", a);
+
+        var m = localStorage.getItem("reduceMotion");
+        if (m !== null) d.setAttribute("data-motion", m === "true" ? "reduced" : "full");
+
+        if (localStorage.getItem("sidebarExpanded") === "true") d.classList.add("nav-expanded");
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
 
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <!-- Dekorativer Hintergrundschimmer -->
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- Nur auf Mobile sichtbar -->
+  <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="sidebar">
+    <span class="burger-box" aria-hidden="true"><span class="burger-line"></span></span>
+  </button>
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <!-- ============================================================
+       SIDEBAR
+  ============================================================ -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-top">
-      <div class="logo" id="logoArea">
-        <div class="logo-mark">L</div>
-        <span class="logo-text">Leon</span>
-      </div>
+      <a href="#/home" class="logo" aria-label="Startseite">
+        <span class="logo-mark" aria-hidden="true">L</span>
+        <span class="logo-text">
+          Leon
+          <small>Portfolio</small>
+        </span>
+      </a>
     </div>
 
-    <nav class="nav">
-      <a href="#" class="nav-item active" data-label="Home">
-        <span class="nav-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <nav class="nav" id="nav" aria-label="Hauptnavigation">
+      <a href="#/home" class="nav-item" data-page="home" data-label="Home">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </span>
         <span class="nav-label">Home</span>
       </a>
 
-      <a href="#" class="nav-item" data-label="Infos">
-        <span class="nav-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <a href="#/about" class="nav-item" data-page="about" data-label="Über mich">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </span>
-        <span class="nav-label">Infos</span>
+        <span class="nav-label">Über mich</span>
       </a>
 
-      <a href="#" class="nav-item" data-label="Projekte">
-        <span class="nav-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <a href="#/projects" class="nav-item" data-page="projects" data-label="Projekte">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </span>
         <span class="nav-label">Projekte</span>
       </a>
 
-      <a href="#" class="nav-item" data-label="Einstellungen">
-        <span class="nav-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      <a href="#/skills" class="nav-item" data-page="skills" data-label="Skills">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </span>
+        <span class="nav-label">Skills</span>
+      </a>
+
+      <a href="#/contact" class="nav-item" data-page="contact" data-label="Kontakt">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <span class="nav-label">Kontakt</span>
+      </a>
+
+      <a href="#/settings" class="nav-item" data-page="settings" data-label="Einstellungen">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </span>
         <span class="nav-label">Einstellungen</span>
       </a>
     </nav>
 
     <div class="sidebar-bottom">
-      <button class="theme-btn" id="darkModeBtn" onclick="toggleDarkMode()" title="Darkmode umschalten">
-        <span class="nav-icon" id="themeIcon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </span>
-        <span class="nav-label" id="modeLabel">Dark Mode</span>
+      <button class="side-btn" id="themeBtn" data-label="Theme" aria-pressed="false">
+        <span class="nav-icon" id="themeIcon" aria-hidden="true"></span>
+        <span class="nav-label" id="themeLabel">Dark Mode</span>
       </button>
 
-      <button class="collapse-btn" onclick="toggleSidebar()" id="collapseBtn" title="Sidebar einklappen">
-        <span class="nav-icon">
-          <svg id="collapseIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <button class="side-btn collapse-btn" id="collapseBtn" data-label="Ausklappen" aria-expanded="false" aria-controls="sidebar">
+        <span class="nav-icon" aria-hidden="true">
+          <svg id="collapseIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </span>
-        <span class="nav-label">Einklappen</span>
+        <span class="nav-label" id="collapseLabel">Einklappen</span>
       </button>
     </div>
   </aside>
 
-  <main class="content" id="mainContent">
+  <!-- ============================================================
+       CONTENT
+  ============================================================ -->
+  <main class="content" id="main">
     <header class="topbar">
       <div class="topbar-left">
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-sub">Willkommen zurück 👋</p>
+        <h1 class="page-title" id="pageTitle">Home</h1>
+        <p class="page-sub" id="pageSub">Willkommen auf meiner Seite 👋</p>
       </div>
       <div class="topbar-right">
-        <div class="avatar">L</div>
+        <!-- PLATZHALTER: eigenes Foto? Dann <img src="..." class="avatar-img"> statt dem L -->
+        <div class="avatar" title="Leon">L</div>
       </div>
     </header>
 
-    <section class="cards">
-      <div class="card card--accent">
-        <div class="card-label">Aktive Projekte</div>
-        <div class="card-value">12</div>
-        <div class="card-hint">↑ 3 diese Woche</div>
+    <!-- ================= HOME ================= -->
+    <section class="page" id="page-home" data-page="home">
+
+      <div class="hero reveal">
+        <div class="hero-text">
+          <span class="pill"><span class="dot"></span>Offen für Projekte</span>
+          <h2 class="hero-title">Hi, ich bin <span class="grad">Leon</span>.</h2>
+          <!-- PLATZHALTER: Diesen Satz ruhig in deinen eigenen Worten neu schreiben -->
+          <p class="hero-lead">
+            Schüler und angehender Webentwickler. Ich bringe mir HTML, CSS und JavaScript
+            selbst bei und baue Projekte, weil sie mich interessieren — nicht, weil sie
+            jemand aufgegeben hat.
+          </p>
+          <div class="hero-actions">
+            <a href="#/projects" class="btn btn-primary">Projekte ansehen</a>
+            <a href="#/contact" class="btn btn-ghost">Kontakt</a>
+          </div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-label">Aufgaben offen</div>
-        <div class="card-value">7</div>
-        <div class="card-hint">Fällig bis Freitag</div>
+
+      <div class="section-head reveal">
+        <h3>Auf einen Blick</h3>
       </div>
-      <div class="card">
-        <div class="card-label">Fortschritt</div>
-        <div class="card-value">84%</div>
-        <div class="card-hint">↑ 12% zum Vormonat</div>
+
+      <div class="cards reveal">
+        <!-- PLATZHALTER: Zahlen anpassen -->
+        <article class="card card--accent">
+          <div class="card-label">Projekte</div>
+          <div class="card-value" data-count="4">0</div>
+          <div class="card-hint">öffentlich auf GitHub</div>
+        </article>
+        <article class="card">
+          <div class="card-label">Technologien</div>
+          <div class="card-value" data-count="6">0</div>
+          <div class="card-hint">im aktiven Einsatz</div>
+        </article>
+        <article class="card">
+          <div class="card-label">Coding seit</div>
+          <div class="card-value" data-count="2">0</div>
+          <div class="card-hint">Jahren, mit Pausen</div>
+        </article>
+        <article class="card">
+          <div class="card-label">Lieblingssprache</div>
+          <div class="card-value card-value--text">JS</div>
+          <div class="card-hint">JavaScript, klar</div>
+        </article>
+      </div>
+
+      <div class="section-head reveal">
+        <h3>Woran ich zuletzt gearbeitet habe</h3>
+        <a href="#/projects" class="link-more">Alle Projekte →</a>
+      </div>
+
+      <div class="panel reveal">
+        <ul class="timeline">
+          <!-- PLATZHALTER: eigene Einträge -->
+          <li>
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <strong>Portfolio-Seite überarbeitet</strong>
+              <p>Sidebar, Dark Mode und Unterseiten neu gebaut — komplett ohne Framework.</p>
+              <time>zuletzt</time>
+            </div>
+          </li>
+          <li>
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <strong>JavaScript vertieft</strong>
+              <p>DOM-Manipulation, Events und <code>localStorage</code> praktisch angewendet.</p>
+              <time>davor</time>
+            </div>
+          </li>
+          <li>
+            <span class="tl-dot"></span>
+            <div class="tl-body">
+              <strong>Erste Seite auf GitHub Pages</strong>
+              <p>Repo aufgesetzt und die Seite live gestellt.</p>
+              <time>Anfang</time>
+            </div>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <section class="welcome-block">
-      <h2>Alles auf einem Blick</h2>
-      <p>Hier siehst du deine neuesten Aktivitäten, Projekte und Einstellungen. Nutze die Sidebar links zur Navigation.</p>
-      <div class="tags">
-        <span class="tag">HTML</span>
-        <span class="tag">CSS</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">GitHub Pages</span>
+    <!-- ================= ÜBER MICH ================= -->
+    <section class="page" id="page-about" data-page="about" hidden>
+      <div class="panel panel--lead reveal">
+        <h2>Über mich</h2>
+        <!-- PLATZHALTER: Kompletten Text durch deinen eigenen ersetzen -->
+        <p>
+          Ich bin Leon, Schüler, und beschäftige mich in meiner Freizeit mit Webentwicklung.
+          Angefangen hat es mit Neugier: Wie funktioniert eine Website eigentlich von innen?
+          Aus der Frage sind ein paar Projekte geworden — und die Erkenntnis, dass ich das
+          Bauen tatsächlich gerne mache.
+        </p>
+        <p>
+          Am liebsten arbeite ich an Sachen, die man sofort sieht: Layouts, Animationen,
+          kleine Interaktionen, die sich gut anfühlen. Frameworks schaue ich mir gerade an,
+          aber ich will vorher verstehen, was darunter passiert.
+        </p>
+        <div class="tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Git</span>
+          <span class="tag">GitHub Pages</span>
+          <span class="tag">UI-Design</span>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel reveal">
+          <h3>Was mich antreibt</h3>
+          <ul class="check-list">
+            <!-- PLATZHALTER -->
+            <li>Dinge selbst bauen statt nur nachzumachen</li>
+            <li>Verstehen, warum etwas funktioniert</li>
+            <li>Design, das nicht nur hübsch, sondern benutzbar ist</li>
+            <li>Sauberer Code, den man in einem Jahr noch liest</li>
+          </ul>
+        </div>
+        <div class="panel reveal">
+          <h3>Woran ich gerade arbeite</h3>
+          <ul class="check-list">
+            <!-- PLATZHALTER -->
+            <li>JavaScript sicherer beherrschen</li>
+            <li>Erste Schritte mit einem Framework</li>
+            <li>Barrierefreiheit ernst nehmen</li>
+            <li>Mehr eigene Projekte veröffentlichen</li>
+          </ul>
+        </div>
       </div>
     </section>
+
+    <!-- ================= PROJEKTE ================= -->
+    <section class="page" id="page-projects" data-page="projects" hidden>
+      <div class="section-head reveal">
+        <h3>Meine Projekte</h3>
+        <div class="filters" id="projectFilters" role="group" aria-label="Projekte filtern">
+          <button class="chip is-active" data-filter="all">Alle</button>
+          <button class="chip" data-filter="web">Web</button>
+          <button class="chip" data-filter="js">JavaScript</button>
+          <button class="chip" data-filter="design">Design</button>
+        </div>
+      </div>
+
+      <div class="projects" id="projectGrid">
+
+        <!-- Echtes Projekt -->
+        <article class="project reveal" data-cat="web js design">
+          <div class="project-top">
+            <span class="project-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+            </span>
+            <span class="badge badge--live">Live</span>
+          </div>
+          <h4>Portfolio-Dashboard</h4>
+          <p>Diese Seite. Einklappbare Sidebar, Dark Mode mit Speicherung, Unterseiten ohne Reload — alles in reinem HTML, CSS und JavaScript.</p>
+          <div class="tags">
+            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/b98leonwink15/b98leonwink15.github.io" target="_blank" rel="noopener">Code →</a>
+            <a href="https://b98leonwink15.github.io" target="_blank" rel="noopener">Live →</a>
+          </div>
+        </article>
+
+        <!-- PLATZHALTER-PROJEKT 1 — Titel, Text, Tags und Links ersetzen -->
+        <article class="project reveal" data-cat="js">
+          <div class="project-top">
+            <span class="project-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </span>
+            <span class="badge">In Arbeit</span>
+          </div>
+          <h4>Projekt zwei</h4>
+          <p>Kurz beschreiben, was das Projekt macht und was du dabei gelernt hast. Zwei bis drei Sätze reichen völlig.</p>
+          <div class="tags">
+            <span class="tag">JavaScript</span><span class="tag">API</span>
+          </div>
+          <div class="project-links">
+            <a href="#" aria-disabled="true">Code →</a>
+          </div>
+        </article>
+
+        <!-- PLATZHALTER-PROJEKT 2 -->
+        <article class="project reveal" data-cat="web design">
+          <div class="project-top">
+            <span class="project-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.7-.7 1.7-1.7 0-.4-.2-.8-.5-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.7 1.7-1.7H16c3.3 0 6-2.7 6-6 0-4.9-4.5-8.4-10-8.4z"/></svg>
+            </span>
+            <span class="badge">Idee</span>
+          </div>
+          <h4>Projekt drei</h4>
+          <p>Noch ein Platz für ein Projekt. Wenn du keins hast: lösch die Karte einfach raus, das Layout passt sich automatisch an.</p>
+          <div class="tags">
+            <span class="tag">CSS</span><span class="tag">Design</span>
+          </div>
+          <div class="project-links">
+            <a href="#" aria-disabled="true">Code →</a>
+          </div>
+        </article>
+
+        <!-- PLATZHALTER-PROJEKT 3 -->
+        <article class="project reveal" data-cat="web">
+          <div class="project-top">
+            <span class="project-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 .9-4.5 4.3 1.1 6.3L12 16.5 6.4 19.5l1.1-6.3L3 8.9 9 8z"/></svg>
+            </span>
+            <span class="badge">Idee</span>
+          </div>
+          <h4>Projekt vier</h4>
+          <p>Hier könnte dein nächstes Projekt stehen. Ein Rechner, ein Spiel, eine Wetter-App — Hauptsache, du hast Lust drauf.</p>
+          <div class="tags">
+            <span class="tag">HTML</span><span class="tag">JavaScript</span>
+          </div>
+          <div class="project-links">
+            <a href="#" aria-disabled="true">Code →</a>
+          </div>
+        </article>
+      </div>
+
+      <p class="empty-state" id="emptyState" hidden>Keine Projekte in dieser Kategorie.</p>
+    </section>
+
+    <!-- ================= SKILLS ================= -->
+    <section class="page" id="page-skills" data-page="skills" hidden>
+      <div class="panel reveal">
+        <h2>Skills</h2>
+        <p class="muted">Ehrliche Selbsteinschätzung — kein Marketing.</p>
+
+        <!-- PLATZHALTER: Prozentwerte in data-level anpassen (0–100) -->
+        <div class="skills">
+          <div class="skill" data-level="85">
+            <div class="skill-head"><span>HTML &amp; Semantik</span><span class="skill-pct">85%</span></div>
+            <div class="skill-bar"><span class="skill-fill"></span></div>
+          </div>
+          <div class="skill" data-level="80">
+            <div class="skill-head"><span>CSS &amp; Layout</span><span class="skill-pct">80%</span></div>
+            <div class="skill-bar"><span class="skill-fill"></span></div>
+          </div>
+          <div class="skill" data-level="65">
+            <div class="skill-head"><span>JavaScript</span><span class="skill-pct">65%</span></div>
+            <div class="skill-bar"><span class="skill-fill"></span></div>
+          </div>
+          <div class="skill" data-level="55">
+            <div class="skill-head"><span>Git &amp; GitHub</span><span class="skill-pct">55%</span></div>
+            <div class="skill-bar"><span class="skill-fill"></span></div>
+          </div>
+          <div class="skill" data-level="45">
+            <div class="skill-head"><span>UI-Design</span><span class="skill-pct">45%</span></div>
+            <div class="skill-bar"><span class="skill-fill"></span></div>
+          </div>
+          <div class="skill" data-level="30">
+            <div class="skill-head"><span>Python</span><span class="skill-pct">30%</span></div>
+            <div class="skill-bar"><span class="skill-fill"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel reveal">
+          <h3>Werkzeuge</h3>
+          <div class="tags">
+            <!-- PLATZHALTER -->
+            <span class="tag">VS Code</span>
+            <span class="tag">Git</span>
+            <span class="tag">GitHub Pages</span>
+            <span class="tag">Chrome DevTools</span>
+            <span class="tag">Figma</span>
+          </div>
+        </div>
+        <div class="panel reveal">
+          <h3>Als Nächstes</h3>
+          <div class="tags">
+            <!-- PLATZHALTER -->
+            <span class="tag tag--soft">React</span>
+            <span class="tag tag--soft">TypeScript</span>
+            <span class="tag tag--soft">Node.js</span>
+            <span class="tag tag--soft">Tailwind</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= KONTAKT ================= -->
+    <section class="page" id="page-contact" data-page="contact" hidden>
+      <div class="panel panel--lead reveal">
+        <h2>Kontakt</h2>
+        <p>Fragen, Feedback oder einfach mal Hallo sagen? Freut mich immer.</p>
+      </div>
+
+      <div class="contact-grid">
+        <a class="contact-card reveal" href="https://github.com/b98leonwink15" target="_blank" rel="noopener">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3z"/></svg>
+          </span>
+          <div>
+            <strong>GitHub</strong>
+            <span>@b98leonwink15</span>
+          </div>
+          <span class="contact-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a class="contact-card reveal" href="mailto:winkelmannleon221@gmail.com">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          <div>
+            <strong>E-Mail</strong>
+            <span>winkelmannleon221@gmail.com</span>
+          </div>
+          <span class="contact-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <!-- PLATZHALTER: href auf dein echtes Profil ändern, sonst die Karte löschen -->
+        <a class="contact-card contact-card--todo reveal" href="#" aria-disabled="true">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </span>
+          <div>
+            <strong>Instagram</strong>
+            <span>Link noch eintragen</span>
+          </div>
+          <span class="contact-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <!-- PLATZHALTER -->
+        <a class="contact-card contact-card--todo reveal" href="#" aria-disabled="true">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18 18 0 0 1 4.3 1.4 15.6 15.6 0 0 0-15 0A18.6 18.6 0 0 1 8.9 3.4L8.6 3a19.7 19.7 0 0 0-4.9 1.4C.6 9 0 13.5.3 17.9a19.9 19.9 0 0 0 6 3l1.2-1.7a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12 0l.5.4a13 13 0 0 1-2 1l1.2 1.7a19.8 19.8 0 0 0 6-3c.4-5.1-.6-9.6-3.4-13.5zM8.3 15.3c-1.2 0-2.1-1.1-2.1-2.4S7.1 10.5 8.3 10.5s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm7.4 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg>
+          </span>
+          <div>
+            <strong>Discord</strong>
+            <span>Nutzername noch eintragen</span>
+          </div>
+          <span class="contact-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <!-- PLATZHALTER -->
+        <a class="contact-card contact-card--todo reveal" href="#" aria-disabled="true">
+          <span class="contact-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM2.4 21h5.2V9.5H2.4V21zm7.6 0h5.2v-6.2c0-3.3 4-3.5 4 0V21H24v-7.8c0-6.3-6.8-6-8.8-2.9V9.5h-5.2V21z"/></svg>
+          </span>
+          <div>
+            <strong>LinkedIn</strong>
+            <span>Link noch eintragen</span>
+          </div>
+          <span class="contact-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ================= EINSTELLUNGEN ================= -->
+    <section class="page" id="page-settings" data-page="settings" hidden>
+      <div class="panel reveal">
+        <h2>Einstellungen</h2>
+        <p class="muted">Wird im Browser gespeichert und beim nächsten Besuch wiederhergestellt.</p>
+
+        <div class="setting">
+          <div class="setting-text">
+            <strong>Dark Mode</strong>
+            <span>Dunkles Farbschema für die ganze Seite.</span>
+          </div>
+          <button class="switch" id="themeSwitch" role="switch" aria-checked="false" aria-label="Dark Mode umschalten">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+
+        <div class="setting">
+          <div class="setting-text">
+            <strong>Akzentfarbe</strong>
+            <span>Färbt Buttons, aktive Menüpunkte und Highlights.</span>
+          </div>
+          <div class="swatches" id="swatches" role="radiogroup" aria-label="Akzentfarbe wählen">
+            <button class="swatch" data-accent="lime"   style="--sw:#c8ff00" role="radio" aria-checked="true"  aria-label="Limette"></button>
+            <button class="swatch" data-accent="violet" style="--sw:#a78bfa" role="radio" aria-checked="false" aria-label="Violett"></button>
+            <button class="swatch" data-accent="blue"   style="--sw:#60a5fa" role="radio" aria-checked="false" aria-label="Blau"></button>
+            <button class="swatch" data-accent="orange" style="--sw:#fb923c" role="radio" aria-checked="false" aria-label="Orange"></button>
+            <button class="swatch" data-accent="pink"   style="--sw:#f472b6" role="radio" aria-checked="false" aria-label="Pink"></button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="setting-text">
+            <strong>Animationen reduzieren</strong>
+            <span>Weniger Bewegung — gut bei empfindlichen Augen oder schwachen Geräten.</span>
+          </div>
+          <button class="switch" id="motionSwitch" role="switch" aria-checked="false" aria-label="Animationen reduzieren">
+            <span class="switch-knob"></span>
+          </button>
+        </div>
+
+        <div class="setting setting--last">
+          <div class="setting-text">
+            <strong>Einstellungen zurücksetzen</strong>
+            <span>Setzt Theme, Farbe und Sidebar auf den Ausgangszustand.</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="resetBtn">Zurücksetzen</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>© <span id="year">2026</span> Leon</span>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <span>Gebaut mit HTML, CSS &amp; Vanilla JS</span>
+    </footer>
   </main>
 
   <script src="script.js"></script>
